@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] Transform playerCamera;
@@ -20,20 +19,11 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] LayerMask ground;
 
-    /// <summary> Stamina implementation 
+    // Stamina implementation
     [SerializeField] private float maxSprintStamina = 100f;
     [SerializeField] float sprintDrainRate = 10f; // Stamina drained per second while sprinting
     [SerializeField] float sprintRecoveryRate = 5f; // Stamina recovered per second when not sprinting
     private float currentSprintStamina;
-
-    /// </summary>
-    /// 
-
-
-    /// fall damage health 
-    private float fallVelocityThreshold = -1f; // Velocity threshold for taking fall damage
-    private float lastYVelocity; // Track the last Y velocity
-    ///
 
     public float jumpHeight = 6f;
     float velocityY;
@@ -48,8 +38,7 @@ public class PlayerMovement : MonoBehaviour
     Vector2 currentDirVelocity;
     Vector3 velocity;
 
-    /// <summary> Hunger
-
+    // Hunger implementation
     [SerializeField] private TextMeshProUGUI hungerText; // Reference to the TextMeshProUGUI element
 
     [SerializeField] private float maxHunger = 100f;
@@ -57,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float hungerDrainRate = 1f; // The rate at which hunger decreases
     [SerializeField] private float healthDamageRate = 5f; // Health damage per second when hunger is zero
     private bool canRun = true;
-    /// </summary>
+
     void Start()
     {
         currentHunger = maxHunger; // Initialize hunger
@@ -72,22 +61,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void Update() //update per frame 
+    void Update() // Update per frame 
     {
         UpdateMouse();
         UpdateMove();
-        UpdateHunger(); // Hunger
-
-
-        ///Health fall damage
-        if (isGrounded && lastYVelocity < fallVelocityThreshold)
-        {
-            OnLanding(lastYVelocity);
-        }
-
-        lastYVelocity = controller.velocity.y; // Update last Y velocity
-
-
+        UpdateHunger(); // Update hunger
     }
 
     void UpdateMouse()
@@ -154,14 +132,7 @@ public class PlayerMovement : MonoBehaviour
         {
             velocityY = -8f;
         }
-
-        if (isGrounded && lastYVelocity < fallVelocityThreshold)
-        {
-            OnLanding(lastYVelocity);
-        }
     }
-
-
 
     public float GetCurrentSprintStamina()
     {
@@ -172,17 +143,6 @@ public class PlayerMovement : MonoBehaviour
     {
         return maxSprintStamina;
     }
-
-
-    private void OnLanding(float velocityY)
-    {
-        float fallDistance = Mathf.Abs(velocityY);
-        // Call a method on PlayerHealth to apply damage
-        GetComponent<PlayerHealth>().TakeFallDamage(fallDistance);
-    }
-
-
-
 
     private void UpdateHunger()
     {
@@ -202,7 +162,6 @@ public class PlayerMovement : MonoBehaviour
             GetComponent<PlayerHealth>().TakeDamage(healthDamageRate * Time.deltaTime);
 
             // Disable running
-            // You can do this by setting a flag that is checked in your UpdateMove method
             canRun = false;
         }
     }
@@ -217,8 +176,13 @@ public class PlayerMovement : MonoBehaviour
         return maxHunger;
     }
 
-
-
+    public void ResetHungerAndStamina()
+    {
+        currentHunger = maxHunger;
+        currentSprintStamina = maxSprintStamina;
+        canRun = true; // Ensure the player can run again
+    }
 
 }
+
 
