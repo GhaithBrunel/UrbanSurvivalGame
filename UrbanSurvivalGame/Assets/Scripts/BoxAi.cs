@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
-
+using UnityEngine.UI;
 public class BoxAI : MonoBehaviour
 {
     public Transform player;
@@ -17,8 +17,16 @@ public class BoxAI : MonoBehaviour
 
     private NavMeshAgent agent;
 
+    public int maxHealth = 100;
+    public Slider healthBar; // Assign this in the inspector
+    private int currentHealth;
+
+
     void Start()
     {
+        currentHealth = maxHealth;
+        UpdateHealthUI();
+
         agent = GetComponent<NavMeshAgent>();
         agent.speed = patrolSpeed;
         agent.stoppingDistance = attackDistance;
@@ -108,6 +116,43 @@ public class BoxAI : MonoBehaviour
             agent.SetDestination(hit.position);
         }
     }
+
+
+
+    public void TakeDamage(int amount)
+    {
+        currentHealth -= amount;
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+        UpdateHealthUI();
+    }
+
+
+    private void Die()
+    {
+        // Here you can add what happens when the enemy dies
+        // For example, you might play a death animation or disable the enemy
+        // gameObject.SetActive(false); // to hide the enemy
+        // Or trigger a death animation
+        Debug.Log("Enemy Died");
+
+        // Disable the NavMeshAgent and other components that should not be active after death
+        if (agent != null) agent.enabled = false ;
+        Destroy(gameObject);
+
+        // You can also add a delay or invoke other methods to handle the enemy's death
+    }
+
+    private void UpdateHealthUI()
+    {
+        if (healthBar != null)
+        {
+            healthBar.value = (float)currentHealth / maxHealth;
+        }
+    }
+
 }
 
 
