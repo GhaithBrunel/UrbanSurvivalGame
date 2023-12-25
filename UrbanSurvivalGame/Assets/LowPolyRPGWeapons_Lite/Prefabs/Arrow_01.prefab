@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 9178626096104075764}
   - component: {fileID: 6378768897947534654}
   - component: {fileID: 8401156109603033622}
-  m_Layer: 0
+  - component: {fileID: -7596236100335008226}
+  m_Layer: 7
   m_Name: Arrow_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,3 +107,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 568036627037906997, guid: 4fa68e0d267fb454bafd0a157c2526ce, type: 3}
+--- !u!114 &-7596236100335008226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4865309214770636011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e16bc4074602d104185571b69966d824, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: New Item
+  description: New Description
+  icon: {fileID: 0}
+  currentQuantity: 1
+  maxQuantity: 16

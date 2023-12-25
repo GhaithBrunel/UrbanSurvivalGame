@@ -1,139 +1,203 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] Transform playerCamera;
+    [Header("Movement Settings")]
+    [SerializeField] private float speed = 6.0f;
+    [SerializeField] private float jumpHeight = 6f;
+    [SerializeField] private float gravity = -30f;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask ground;
+    [SerializeField][Range(0.0f, 0.5f)] private float moveSmoothTime = 0.3f;
 
-    [SerializeField][Range(0.0f, 0.5f)] float mouseSmoothTime = 0.03f;
-    [SerializeField] bool cursorLock = true;
-    [SerializeField] float mouseSensitivity = 3.5f;
-    [SerializeField] float Speed = 6.0f;
+    private Vector3 frozenPosition;
+    private Quaternion frozenRotation;
+    private bool isFrozen = false;
 
-    [SerializeField][Range(0.0f, 0.5f)] float moveSmoothTime = 0.3f;
-    [SerializeField] float gravity = -30f;
-    [SerializeField] Transform groundCheck;
+    [Header("Mouse Look Settings")]
+    [SerializeField] private Transform playerCamera;
+    [SerializeField][Range(0.0f, 0.5f)] private float mouseSmoothTime = 0.03f;
+    [SerializeField] private float mouseSensitivity = 3.5f;
+    [SerializeField] private bool cursorLock = true;
 
-    [SerializeField] LayerMask ground;
-
-    // Stamina implementation
+    [Header("Stamina Settings")]
     [SerializeField] private float maxSprintStamina = 100f;
-    [SerializeField] float sprintDrainRate = 10f; // Stamina drained per second while sprinting
-    [SerializeField] float sprintRecoveryRate = 5f; // Stamina recovered per second when not sprinting
+    [SerializeField] private float sprintDrainRate = 10f;
+    [SerializeField] private float sprintRecoveryRate = 5f;
     private float currentSprintStamina;
 
-    public float jumpHeight = 6f;
-    float velocityY;
-    bool isGrounded;
-
-    float cameraCap;
-    Vector2 currentMouseDelta;
-    Vector2 currentMouseDeltaVelocity;
-
-    CharacterController controller;
-    Vector2 currentDir;
-    Vector2 currentDirVelocity;
-    Vector3 velocity;
-
-    // Hunger implementation
-    [SerializeField] private TextMeshProUGUI hungerText; // Reference to the TextMeshProUGUI element
-
+    [Header("Hunger Settings")]
+    [SerializeField] private TextMeshProUGUI hungerText;
     [SerializeField] private float maxHunger = 100f;
+    [SerializeField] private float hungerDrainRate = 1f;
+    [SerializeField] private float healthDamageRate = 5f;
     private float currentHunger;
-    [SerializeField] private float hungerDrainRate = 1f; // The rate at which hunger decreases
-    [SerializeField] private float healthDamageRate = 5f; // Health damage per second when hunger is zero
+
+    private CharacterController controller;
+    private Vector2 currentDir;
+    private Vector2 currentDirVelocity;
+    private Vector2 currentMouseDelta;
+    private Vector2 currentMouseDeltaVelocity;
+    private float cameraCap;
+    private float velocityY;
+    private bool isGrounded;
     private bool canRun = true;
+    private bool canMove = true;
+    private bool cameraCanMove = true;
 
-    void Start()
+    private void Start()
     {
-        currentHunger = maxHunger; // Initialize hunger
+        InitializePlayer();
+    }
 
-        currentSprintStamina = maxSprintStamina;
-        controller = GetComponent<CharacterController>();
-
-        if (cursorLock)
+    private void Update()
+    {
+        if (isFrozen)
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = true;
+            transform.position = frozenPosition;
+            transform.rotation = frozenRotation;
+            return;
         }
+
+        if (!canMove) return;
+
+        UpdateMouseLook();
+        UpdateMovement();
+        UpdateHunger();
     }
 
-    void Update() // Update per frame 
+
+    private void InitializePlayer()
     {
-        UpdateMouse();
-        UpdateMove();
-        UpdateHunger(); // Update hunger
+        controller = GetComponent<CharacterController>();
+        currentHunger = maxHunger;
+        currentSprintStamina = maxSprintStamina;
+        LockCursor(cursorLock);
     }
 
-    void UpdateMouse()
+    private void UpdateMouseLook()
     {
+        if (!cameraCanMove) return;
+
         Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-
         currentMouseDelta = Vector2.SmoothDamp(currentMouseDelta, targetMouseDelta, ref currentMouseDeltaVelocity, mouseSmoothTime);
 
         cameraCap -= currentMouseDelta.y * mouseSensitivity;
-
         cameraCap = Mathf.Clamp(cameraCap, -90.0f, 90.0f);
-
         playerCamera.localEulerAngles = Vector3.right * cameraCap;
-
         transform.Rotate(Vector3.up * currentMouseDelta.x * mouseSensitivity);
     }
-
-    void UpdateMove()
+  
+    private void UpdateMovement()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, 0.2f, ground);
-
-        Vector2 targetDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        targetDir.Normalize();
-
+        Vector2 targetDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         currentDir = Vector2.SmoothDamp(currentDir, targetDir, ref currentDirVelocity, moveSmoothTime);
 
-        float adjustedSpeed = Speed;
-        bool isWalkingSlowly = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
-        bool isTryingToSprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-        bool hasStamina = currentSprintStamina > 0;
-
-        if (canRun && isTryingToSprint && hasStamina)
-        {
-            adjustedSpeed *= 2f; // Increase speed for sprinting
-            currentSprintStamina -= sprintDrainRate * Time.deltaTime;
-        }
-        else
-        {
-            if (isWalkingSlowly)
-            {
-                adjustedSpeed *= 0.5f; // Halve the speed when Ctrl is pressed
-            }
-            // Reset speed to normal if trying to sprint without stamina
-            else if (isTryingToSprint && !hasStamina)
-            {
-                adjustedSpeed = Speed;
-            }
-            currentSprintStamina += sprintRecoveryRate * Time.deltaTime; // Recover sprint stamina
-        }
-        currentSprintStamina = Mathf.Clamp(currentSprintStamina, 0, maxSprintStamina);
-
+        float adjustedSpeed = CalculateSpeed();
         velocityY += gravity * 2f * Time.deltaTime;
-
         Vector3 velocity = (transform.forward * currentDir.y + transform.right * currentDir.x) * adjustedSpeed + Vector3.up * velocityY;
 
         controller.Move(velocity * Time.deltaTime);
 
         if (isGrounded && Input.GetButtonDown("Jump"))
-        {
             velocityY = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
 
         if (!isGrounded && controller.velocity.y < -1f)
-        {
             velocityY = -8f;
+    }
+
+    private float CalculateSpeed()
+    {
+        float currentSpeed = speed;
+        if (canRun && IsSprinting() && currentSprintStamina > 0)
+        {
+            currentSpeed *= 2f;
+            currentSprintStamina -= sprintDrainRate * Time.deltaTime;
+        }
+        else
+        {
+            if (IsWalkingSlowly())
+                currentSpeed *= 0.5f;
+
+            currentSprintStamina += sprintRecoveryRate * Time.deltaTime;
+        }
+        currentSprintStamina = Mathf.Clamp(currentSprintStamina, 0, maxSprintStamina);
+        return currentSpeed;
+    }
+
+    private bool IsSprinting()
+    {
+        return Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+    }
+
+    private bool IsWalkingSlowly()
+    {
+        return Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+    }
+
+    private void UpdateHunger()
+    {
+        currentHunger -= hungerDrainRate * Time.deltaTime;
+        if (currentHunger <= 0)
+        {
+            GetComponent<PlayerHealth>().TakeDamage(healthDamageRate * Time.deltaTime);
+            canRun = false;
+            currentHunger = 0;
+        }
+
+        if (currentHunger <= maxHunger * 0.5f)
+            hungerText.text = "Hunger is at 50%!";
+    }
+
+    public void SetPlayerMovement(bool enable)
+    {
+        canMove = enable;
+        cameraCanMove = enable;
+
+        if (!enable)
+        {
+            // Freeze player
+            FreezePlayer();
+        }
+        else if (isFrozen)
+        {
+            // Unfreeze player
+            UnfreezePlayer();
         }
     }
 
+    private void FreezePlayer()
+    {
+        frozenPosition = transform.position;
+        frozenRotation = transform.rotation;
+        isFrozen = true;
+    }
+
+    private void UnfreezePlayer()
+    {
+        isFrozen = false;
+    }
+
+
+    public void SetCameraMovement(bool enable)
+    {
+        cameraCanMove = enable;
+    }
+
+    public void SetCursorState(bool isInventoryOpen)
+    {
+        LockCursor(!isInventoryOpen);
+    }
+
+    private void LockCursor(bool shouldLock)
+    {
+        Cursor.lockState = shouldLock ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = !shouldLock;
+    }
+
+    // Public methods for accessing current stamina and hunger...
     public float GetCurrentSprintStamina()
     {
         return currentSprintStamina;
@@ -142,28 +206,6 @@ public class PlayerMovement : MonoBehaviour
     public float GetMaxSprintStamina()
     {
         return maxSprintStamina;
-    }
-
-    private void UpdateHunger()
-    {
-        if (currentHunger > 0)
-        {
-            currentHunger -= hungerDrainRate * Time.deltaTime;
-
-            // Check if hunger is at 50%
-            if (currentHunger <= maxHunger * 0.5f && currentHunger > maxHunger * 0.5f - hungerDrainRate * Time.deltaTime)
-            {
-                hungerText.text = "Hunger is at 50%!"; // Display the message
-            }
-        }
-        else
-        {
-            // Apply health damage when hunger is zero
-            GetComponent<PlayerHealth>().TakeDamage(healthDamageRate * Time.deltaTime);
-
-            // Disable running
-            canRun = false;
-        }
     }
 
     public float GetCurrentHunger()
@@ -180,9 +222,9 @@ public class PlayerMovement : MonoBehaviour
     {
         currentHunger = maxHunger;
         currentSprintStamina = maxSprintStamina;
-        canRun = true; // Ensure the player can run again
+        canRun = true;
     }
-
 }
+
 
 
