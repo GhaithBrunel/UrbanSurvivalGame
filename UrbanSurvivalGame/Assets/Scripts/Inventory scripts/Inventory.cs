@@ -244,24 +244,79 @@ public class Inventory : MonoBehaviour
         currentDraggedItem = null;
         currentDragSlotIndex = -1;
     }
-
+    // new one below
     private void enableHotbarItem(int hotbarIndex)
     {
-        foreach (GameObject a in equippableItems)
+        // Deactivate and reset all items
+        foreach (GameObject item in equippableItems)
         {
-            a.SetActive(false);
+            if (item.activeSelf)
+            {
+                // Call ResetWeapon on the active item
+                Axe axeScript = item.GetComponent<Axe>();
+                if (axeScript != null)
+                {
+                    axeScript.ResetWeapon();
+                }
+                // sword
+                Sword swordScript = item.GetComponent<Sword>();
+                if (swordScript != null)
+                {
+                    swordScript.ResetWeapon();
+                }
+
+                item.SetActive(false);
+            }
         }
 
+        // Activate the selected hotbar item
         Slot hotbarSlot = hotbarSlots[hotbarIndex];
         selectedItemImage.transform.position = hotbarSlot.transform.position;
 
-
-        if (hotbarSlot.hasItem())
+        if (hotbarSlot.hasItem() && hotbarSlot.getItem().equippableItemIndex != -1)
         {
-            if (hotbarSlot.getItem().equippableItemIndex != -1)
+            GameObject selectedItem = equippableItems[hotbarSlot.getItem().equippableItemIndex];
+            selectedItem.SetActive(true);
+        }
+    }
+
+
+
+
+    public void EatRibs()
+    {
+        // Assuming each slot has a quantity and an identifier for the item type (like "Ribs")
+        foreach (var slot in hotbarSlots)
+        {
+            if (slot.hasItem() && slot.getItem().name == "Ribs")
             {
-                equippableItems[hotbarSlot.getItem().equippableItemIndex].SetActive(true);
+                slot.getItem().currentQuantity -= 1; // Decrease the quantity of ribs
+                slot.updateData(); // Update the slot UI
+
+                if (slot.getItem().currentQuantity <= 0)
+                {
+                    // If no more ribs, disable them in the hotbar
+                    slot.setItem(null);
+                    DisableEquippedRibs();
+                }
+                break; // Exit the loop after processing the first rib stack found
             }
         }
     }
+
+    private void DisableEquippedRibs()
+    {
+        // Logic to disable the ribs from the player's hand or hotbar
+        foreach (GameObject item in equippableItems)
+        {
+            if (item.name == "Ribs")
+            {
+                item.SetActive(false);
+                break;
+            }
+        }
+    }
+
+
+
 }

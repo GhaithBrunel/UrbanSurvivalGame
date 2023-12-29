@@ -9,10 +9,17 @@ public class Axe : MonoBehaviour
     private bool isSwinging = false;
     private Collider axeCollider; // Reference to the axe's collider
 
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
+
+
     void Start()
     {
         animator = GetComponent<Animator>();
         axeCollider = GetComponent<Collider>(); // Get the axe's collider
+
+        originalPosition = transform.localPosition;
+        originalRotation = transform.localRotation;
     }
 
     void Update()
@@ -59,4 +66,24 @@ public class Axe : MonoBehaviour
             }
         }
     }
+
+
+    public void ResetWeapon()
+    {
+        StopAllCoroutines();
+        isSwinging = false;
+        axeCollider.enabled = false;
+        if (animator != null)
+        {
+            animator.ResetTrigger("Attacking");
+            // Make sure this matches your animator's idle state
+        }
+
+        // Reset the position and rotation of the axe
+        transform.localPosition = originalPosition;
+        transform.localRotation = originalRotation;
+    }
+
+
+
 }

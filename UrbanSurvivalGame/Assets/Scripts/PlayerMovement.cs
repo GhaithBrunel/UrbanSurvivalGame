@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -34,6 +35,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float healthDamageRate = 5f;
     private float currentHunger;
 
+    [Header("Health Settings")]
+    [SerializeField] private PlayerHealth playerHealth; // Reference to the player's health component
+    [SerializeField] private float healthRegenRate = 10f; // Amount of health to regenerate
+    [SerializeField] private float healthRegenInterval = 30f; // Time interval for health regeneration in seconds
+
+
     private CharacterController controller;
     private Vector2 currentDir;
     private Vector2 currentDirVelocity;
@@ -49,7 +56,9 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         InitializePlayer();
+        StartCoroutine(HealthRegenerationRoutine());
     }
+
 
     private void Update()
     {
@@ -224,6 +233,33 @@ public class PlayerMovement : MonoBehaviour
         currentSprintStamina = maxSprintStamina;
         canRun = true;
     }
+
+
+    public void Eat(float hungerIncreaseAmount)
+    {
+        currentHunger += hungerIncreaseAmount;
+        currentHunger = Mathf.Clamp(currentHunger, 0, maxHunger);
+        Debug.Log("Current Hunger: " + currentHunger);
+    }
+
+
+
+    private IEnumerator HealthRegenerationRoutine()
+    {
+        Debug.Log("Health regeneration routine started");
+        while (true)
+        {
+            yield return new WaitForSeconds(healthRegenInterval);
+            Debug.Log("Health regeneration check");
+            if (currentHunger > maxHunger * 0.6f)
+            {
+                Debug.Log("Regenerating health by " + healthRegenRate);
+                playerHealth.Heal(healthRegenRate);
+            }
+        }
+    }
+
+
 }
 
 

@@ -9,10 +9,20 @@ public class Sword : MonoBehaviour
     private bool isSwinging = false;
     private Collider swordCollider; // Reference to the sword's collider
 
+    // Original transform values for the sword when not in use
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
+
     void Start()
     {
+
+      
         animator = GetComponent<Animator>();
         swordCollider = GetComponent<Collider>(); // Get the sword's collider
+
+        // Store the original position and rotation
+        originalPosition = transform.localPosition;
+        originalRotation = transform.localRotation;
     }
 
     void Update()
@@ -23,7 +33,7 @@ public class Sword : MonoBehaviour
         {
             animator.SetTrigger("Attacking");
             isSwinging = true;
-            swordCollider.enabled = true; // Disable the collider when starting the swing
+            swordCollider.enabled = true; // Enable the collider when starting the swing
             StartCoroutine(ResetSwing());
         }
     }
@@ -42,7 +52,7 @@ public class Sword : MonoBehaviour
     {
         yield return new WaitForSeconds(2.0f); // Duration of 'Attacking' animation
         isSwinging = false;
-        swordCollider.enabled = false; // Re-enable the collider after the swing is complete
+        swordCollider.enabled = false; // Disable the collider after the swing is complete
         animator.ResetTrigger("Attacking");
     }
 
@@ -59,7 +69,25 @@ public class Sword : MonoBehaviour
             }
         }
     }
+
+    public void ResetWeapon()
+    {
+       
+        StopAllCoroutines(); // Stop any ongoing actions
+        isSwinging = false;
+        swordCollider.enabled = false;
+        if (animator != null)
+        {
+            animator.ResetTrigger("Attacking");
+       
+        }
+
+        // Reset the position and rotation of the sword
+        transform.localPosition = originalPosition;
+        transform.localRotation = originalRotation;
+    }
 }
+
 
 
 
