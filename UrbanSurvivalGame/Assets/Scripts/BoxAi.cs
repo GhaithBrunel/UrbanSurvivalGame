@@ -21,7 +21,7 @@ public class BoxAI : MonoBehaviour
     public Slider healthBar; // Assign this in the inspector
     private int currentHealth;
 
-
+    public GameObject itemPrefab; // Reference to the item prefab, assign this in the inspector
     void Start()
     {
         currentHealth = maxHealth;
@@ -132,14 +132,23 @@ public class BoxAI : MonoBehaviour
 
     private void Die()
     {
-        // Here you can add what happens when the enemy dies
-        // For example, you might play a death animation or disable the enemy
-        // gameObject.SetActive(false); // to hide the enemy
-        // Or trigger a death animation
         Debug.Log("Enemy Died");
 
         // Disable the NavMeshAgent and other components that should not be active after death
-        if (agent != null) agent.enabled = false ;
+        if (agent != null) agent.enabled = false;
+
+        // Determine the number of items to drop (between 1 and 3)
+        int itemsToDrop = Random.Range(1, 4); // Random.Range is inclusive for the first parameter and exclusive for the second
+
+        // Spawn the items at the wolf's position
+        for (int i = 0; i < itemsToDrop; i++)
+        {
+            if (itemPrefab != null)
+            {
+                Instantiate(itemPrefab, transform.position, Quaternion.identity);
+            }
+        }
+
         Destroy(gameObject);
 
         // You can also add a delay or invoke other methods to handle the enemy's death
