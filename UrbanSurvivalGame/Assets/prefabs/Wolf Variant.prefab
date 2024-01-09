@@ -608,7 +608,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0845051a039f94ba616b5528d88abe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   patrolSpeed: 3.5
   chaseSpeed: 5
   attackDistance: 2
@@ -618,6 +617,7 @@ MonoBehaviour:
   chaseRadius: 10
   maxHealth: 100
   healthBar: {fileID: 5097847155322108043}
+  itemPrefab: {fileID: 0}
 --- !u!65 &7422948372083206601
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -648,7 +648,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 8797136713667278496}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1.25
+  m_Radius: 0.5
   m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50

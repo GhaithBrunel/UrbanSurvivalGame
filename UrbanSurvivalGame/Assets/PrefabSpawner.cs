@@ -1,23 +1,31 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+[System.Serializable]
+public class PrefabSpawnData
+{
+    public GameObject prefab;
+    public int count;
+}
+
 public class PrefabSpawner : MonoBehaviour
 {
-    public GameObject[] prefabsToSpawn;
-    public int numberOfInstances = 10;
+    public PrefabSpawnData[] spawnData;
 
     void Start()
     {
-        SpawnPrefabs();
+        foreach (var data in spawnData)
+        {
+            SpawnPrefabs(data.prefab, data.count);
+        }
     }
 
-    void SpawnPrefabs()
+    void SpawnPrefabs(GameObject prefab, int count)
     {
-        for (int i = 0; i < numberOfInstances; i++)
+        for (int i = 0; i < count; i++)
         {
-            GameObject prefabToSpawn = prefabsToSpawn[Random.Range(0, prefabsToSpawn.Length)];
             Vector3 randomPosition = RandomNavmeshLocation();
-            Instantiate(prefabToSpawn, randomPosition, Quaternion.identity);
+            Instantiate(prefab, randomPosition, Quaternion.identity);
         }
     }
 
@@ -34,3 +42,4 @@ public class PrefabSpawner : MonoBehaviour
         return point;
     }
 }
+

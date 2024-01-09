@@ -15,7 +15,7 @@ MonoBehaviour:
   createdItemPrefab: {fileID: 8203073568141072114, guid: 6cd1ac9652a50da4485a86492f47c63d, type: 3}
   quantityProduced: 1
   requiredIngredients:
-  - itemName: axe_wood
+  - itemName: Axe_Wood
     requiredQuantity: 1
-  - itemName: axe_Metal
+  - itemName: Axe_Metal
     requiredQuantity: 1

@@ -1,12 +1,17 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+
 public class BoxAI : MonoBehaviour
 {
-    public Transform player;
+    private Transform player;
+    private Vector3 lastPosition;
+    private float stationaryTime = 0f;
+    private const float maxStationaryTime = 2f; // 2 seconds
+
     [SerializeField] private float patrolSpeed = 3.5f;
     [SerializeField] private float chaseSpeed = 5f;
-    [SerializeField] private float attackDistance = 2f;
+    [SerializeField] private float attackDistance = 1f;
     [SerializeField] private float attackMoveRadius = 5f;
     [SerializeField] private float attackCooldown = 3f;
     [SerializeField] private float waypointDistance = 20f;
@@ -22,8 +27,21 @@ public class BoxAI : MonoBehaviour
     private int currentHealth;
 
     public GameObject itemPrefab; // Reference to the item prefab, assign this in the inspector
+
     void Start()
     {
+        // Find the player by tag
+        GameObject playerGameObject = GameObject.FindWithTag("Player");
+        if (playerGameObject != null)
+        {
+            player = playerGameObject.transform;
+        }
+        else
+        {
+            Debug.LogError("Player not found. Make sure your player GameObject has the 'Player' tag assigned.");
+            return; // Stop further execution if player is not found
+        }
+
         currentHealth = maxHealth;
         UpdateHealthUI();
 
@@ -36,6 +54,8 @@ public class BoxAI : MonoBehaviour
 
     void Update()
     {
+        if (player == null) return; // Ensure player is found
+
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
         if (distanceToPlayer <= chaseRadius)
@@ -51,15 +71,54 @@ public class BoxAI : MonoBehaviour
         {
             isAttacking = false;
         }
+
+        if (Vector3.Distance(transform.position, lastPosition) < 0.1f)
+        {
+            // Increment the stationary time
+            stationaryTime += Time.deltaTime;
+
+            // If the wolf has been stationary for too long, set a new destination
+            if (stationaryTime > maxStationaryTime)
+            {
+                SetNewDestination();
+                stationaryTime = 0f;
+            }
+        }
+        else
+        {
+            // Reset the stationary time if the wolf is moving
+            stationaryTime = 0f;
+        }
+
+        // Update the last known position
+        lastPosition = transform.position;
+
+
     }
 
     void Patrol()
     {
-        if (!agent.pathPending && agent.remainingDistance < 1f)
+        // Check if the path is computed and agent is close to the destination
+        if (!agent.pathPending &&
+            agent.remainingDistance <= agent.stoppingDistance &&
+            agent.pathStatus == NavMeshPathStatus.PathComplete)
         {
             SetNewDestination();
         }
     }
+
+    void SetNewDestination()
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * waypointDistance;
+        randomDirection += transform.position;
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomDirection, out hit, waypointDistance, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+            agent.isStopped = false; // Ensure the agent is not stopped
+        }
+    }
+
 
     void ChasePlayer(float distanceToPlayer)
     {
@@ -106,16 +165,7 @@ public class BoxAI : MonoBehaviour
         }
     }
 
-    void SetNewDestination()
-    {
-        Vector3 randomDirection = Random.insideUnitSphere * waypointDistance;
-        randomDirection += transform.position;
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomDirection, out hit, waypointDistance, NavMesh.AllAreas))
-        {
-            agent.SetDestination(hit.position);
-        }
-    }
+  
 
 
 

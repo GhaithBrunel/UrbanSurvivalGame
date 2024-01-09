@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3141b3b165f52840ba019fd37e162da, type: 3}
   m_Name: Sword_recipe
   m_EditorClassIdentifier: 
-  createdItemPrefab: {fileID: 0}
+  createdItemPrefab: {fileID: 355312524381552382, guid: b84d7ca3927758646a65731cc107aa76, type: 3}
   quantityProduced: 1
-  requiredIngredients: []
+  requiredIngredients:
+  - itemName: Sword_Wood
+    requiredQuantity: 1
+  - itemName: Sword_Metal
+    requiredQuantity: 1
