@@ -33,6 +33,9 @@ public class Inventory : MonoBehaviour
     public List<GameObject> equippableItems = new List<GameObject>();
     public Transform selectedItemImage;
 
+    [Header("Crafting")]
+    public List<Recipe> itemRecipes = new List<Recipe>();
+
     public void Start()
     {
         toggleInventory(false);
@@ -316,7 +319,88 @@ public class Inventory : MonoBehaviour
             }
         }
     }
+    public void craftItem(string itemName)
+    {
+        foreach (Recipe recipe in itemRecipes)
+        {
+            if (recipe.createdItemPrefab.GetComponent<Item>().name == itemName)
+            {
+                bool haveAllIngredients = true;
+                for (int i = 0; i < recipe.requiredIngredients.Count; i++)
+                {
+                    if (haveAllIngredients)
+                        haveAllIngredients = haveIngredient(recipe.requiredIngredients[i].itemName, recipe.requiredIngredients[i].requiredQuantity);
+                }
 
+                if (haveAllIngredients)
+                {
+                    for (int i = 0; i < recipe.requiredIngredients.Count; i++)
+                    {
+                        removeIngredient(recipe.requiredIngredients[i].itemName, recipe.requiredIngredients[i].requiredQuantity);
+                    }
+
+                    GameObject craftedItem = Instantiate(recipe.createdItemPrefab, dropLocation.position, Quaternion.identity);
+                    craftedItem.GetComponent<Item>().currentQuantity = recipe.quantityProduced;
+
+                    addItemToInventory(craftedItem.GetComponent<Item>());
+                }
+
+                break;
+            }
+        }
+    }
+
+
+    private void removeIngredient(string itemName, int quantity)
+    {
+        if (!haveIngredient(itemName, quantity))
+            return;
+
+        int remainingQuantity = quantity;
+
+        foreach (Slot curSlot in allInventorySlots)
+        {
+            Item item = curSlot.getItem();
+
+            if (item != null && item.name == itemName)
+            {
+                if (item.currentQuantity >= remainingQuantity)
+                {
+                    item.currentQuantity -= remainingQuantity;
+
+                    if (item.currentQuantity == 0)
+                    {
+                        curSlot.setItem(null);
+                        curSlot.updateData();
+                    }
+
+                    return;
+                }
+                else
+                {
+                    remainingQuantity -= item.currentQuantity;
+                    curSlot.setItem(null);
+                }
+            }
+        }
+    }
+
+    private bool haveIngredient(string itemName, int quantity)
+    {
+        int foundQuantity = 0;
+        foreach (Slot curSlot in allInventorySlots)
+        {
+            if (curSlot.hasItem() && curSlot.getItem().name == itemName)
+            {
+                foundQuantity += curSlot.getItem().currentQuantity;
+
+                if (foundQuantity >= quantity)
+                    return true;
+            }
+        }
+
+        return false;
+    }
 
 
 }
