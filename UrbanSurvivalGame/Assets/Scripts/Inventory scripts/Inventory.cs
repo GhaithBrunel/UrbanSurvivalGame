@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.IO;
 
 public class Inventory : MonoBehaviour
 {
@@ -36,17 +37,30 @@ public class Inventory : MonoBehaviour
     [Header("Crafting")]
     public List<Recipe> itemRecipes = new List<Recipe>();
 
+    [Header("Save/Load")]
+    public List<GameObject> allItemPrefabs = new List<GameObject>();
+    private string saveFileName;
+
+
+
     public void Start()
     {
-        toggleInventory(false);
+        saveFileName = Application.persistentDataPath + "/inventorySave.json";
 
+        toggleInventory(false);
         allInventorySlots.AddRange(hotbarSlots);
         allInventorySlots.AddRange(inventorySlots);
-
         foreach (Slot uiSlot in allInventorySlots)
         {
             uiSlot.initialiseSlot();
         }
+        loadInventory();
+    }
+
+
+    public void SaveInventory()
+    {
+        saveInventory();
     }
 
     public void Update()
@@ -110,8 +124,20 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private void addItemToInventory(Item itemToAdd)
+    private void addItemToInventory(Item itemToAdd, int overrideIndex = -1)
     {
+
+        if (overrideIndex != -1)
+        {
+            // Directly place the item in the specified slot index
+            allInventorySlots[overrideIndex].setItem(itemToAdd);
+            itemToAdd.gameObject.SetActive(false);
+            allInventorySlots[overrideIndex].updateData();
+            return;
+        }
+
+
+
         int leftoverQuantity = itemToAdd.currentQuantity;
         Slot openSlot = null;
         for (int i = 0; i < allInventorySlots.Count; i++)
@@ -402,5 +428,89 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
+    private void saveInventory()
+    {
+        InventoryData data = new InventoryData();
+
+        foreach (Slot slot in allInventorySlots)
+        {
+            Item item = slot.getItem();
+            if (item != null)
+            {
+                ItemData itemData = new ItemData(item.name, item.currentQuantity, allInventorySlots.IndexOf(slot));
+                data.slotData.Add(itemData);
+            }
+        }
+
+        string jsonData = JsonUtility.ToJson(data);
+
+        File.WriteAllText(saveFileName, jsonData);
+    }
+
+    public void loadInventory()
+    {
+        if (File.Exists(saveFileName))
+        {
+            string jsonData = File.ReadAllText(saveFileName);
+
+            InventoryData data = JsonUtility.FromJson<InventoryData>(jsonData);
+
+            clearInventory();
+
+            foreach (ItemData itemData in data.slotData)
+            {
+                GameObject itemPrefab = allItemPrefabs.Find(prefab => prefab.GetComponent<Item>().name == itemData.itemName);
+
+                if (itemPrefab != null)
+                {
+                    GameObject createdItem = Instantiate(itemPrefab, dropLocation.position, Quaternion.identity);
+                    Item item = createdItem.GetComponent<Item>();
+
+                    item.currentQuantity = itemData.quantity;
+
+                    addItemToInventory(item, itemData.slotIndex);
+                }
+            }
+        }
+
+        foreach (Slot slot in allInventorySlots)
+        {
+            slot.updateData();
+        }
+    }
+
+    public void clearInventory()
+    {
+        foreach (Slot slot in allInventorySlots)
+        {
+            slot.setItem(null);
+        }
+    }
+
+
+
+    [System.Serializable]
+    public class ItemData
+    {
+        public string itemName;
+        public int quantity;
+        public int slotIndex;
+
+        public ItemData(string itemName, int quantity, int slotIndex)
+        {
+            this.itemName = itemName;
+            this.quantity = quantity;
+            this.slotIndex = slotIndex;
+        }
+    }
+
+    [System.Serializable]
+    public class InventoryData
+    {
+        public List<ItemData> slotData = new List<ItemData>();
+    }
 
 }
+
+
+

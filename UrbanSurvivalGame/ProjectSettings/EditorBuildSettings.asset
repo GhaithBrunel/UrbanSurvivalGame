@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 8ac2f38faec6ca7478b679b2f6e34632
+  - enabled: 1
+    path: Assets/POLYGON city pack/scene/DemoScene.unity
+    guid: 7759de288f5d4ee449a0ca5e2244944a
   m_configObjects: {}

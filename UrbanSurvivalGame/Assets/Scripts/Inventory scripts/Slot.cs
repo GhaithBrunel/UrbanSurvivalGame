@@ -6,7 +6,7 @@ using TMPro;
 public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public bool hovered;
-    private Item heldItem;
+    public Item heldItem;
 
     private Color opaque = new Color(1, 1, 1, 1);
     private Color transparent = new Color(1, 1, 1, 0);
