@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 4000010984129220}
   - component: {fileID: 33000011255259874}
   - component: {fileID: 23000011959071880}
-  m_Layer: 0
+  - component: {fileID: 4979728514462735092}
+  - component: {fileID: -3785647485158921001}
+  m_Layer: 6
   m_Name: Stack Big Pink
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,3 +85,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4979728514462735092
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000011330625512}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: c4c25fdd3ce365947aefa4f8a43915f0, type: 3}
+--- !u!208 &-3785647485158921001
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000011330625512}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2.6460001, y: 4.406, z: 3.3090003}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 4.406, z: 0.66300005}
+  m_TimeToStationary: 0.5

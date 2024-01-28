@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 4000014214576186}
   - component: {fileID: 33000013845498454}
   - component: {fileID: 23000010282249244}
-  m_Layer: 0
+  - component: {fileID: -3692264633046801496}
+  - component: {fileID: -8285888794973051222}
+  m_Layer: 6
   m_Name: Modern House
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,3 +85,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-3692264633046801496
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010255341050}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: a0f6254ca94ec714cbd427fbcb7ab896, type: 3}
+--- !u!208 &-8285888794973051222
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010255341050}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2.233, y: 1.3750001, z: 1.159}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.573, y: 1.3670001, z: 0.08400001}
+  m_TimeToStationary: 0.5

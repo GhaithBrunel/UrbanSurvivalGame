@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 4000011315634334}
   - component: {fileID: 33000012584265138}
   - component: {fileID: 23000012788961848}
-  m_Layer: 0
+  - component: {fileID: -5065296023074854304}
+  - component: {fileID: -6394162273100354924}
+  m_Layer: 6
   m_Name: High Tower Low White
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,3 +85,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-5065296023074854304
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000011497171632}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: a5bc381b9f5e0d44ab7d90006ad65440, type: 3}
+--- !u!208 &-6394162273100354924
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000011497171632}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 4.2790003, y: 5.9210005, z: 4.374}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 5.9210005, z: 0.095000006}
+  m_TimeToStationary: 0.5

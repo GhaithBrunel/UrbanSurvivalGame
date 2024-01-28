@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 4000013870186606}
   - component: {fileID: 33000013871244744}
   - component: {fileID: 23000013197827218}
-  m_Layer: 0
+  - component: {fileID: -6025481530791854623}
+  - component: {fileID: 1014201510799624059}
+  m_Layer: 6
   m_Name: Flatty Roof High Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,3 +85,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-6025481530791854623
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013335517136}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 3db01267f8afc144e99f0102b86667ad, type: 3}
+--- !u!208 &1014201510799624059
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013335517136}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2.638, y: 2.3260002, z: 2.8730001}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0.053000003, y: 2.3260002, z: -0.17300001}
+  m_TimeToStationary: 0.5

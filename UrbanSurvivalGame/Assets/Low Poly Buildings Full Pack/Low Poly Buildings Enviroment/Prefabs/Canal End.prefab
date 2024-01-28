@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 4000012267981996}
   - component: {fileID: 33000012489407782}
   - component: {fileID: 23000011483307260}
-  m_Layer: 0
+  - component: {fileID: -3256933847625256835}
+  m_Layer: 6
   m_Name: Canal End
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,3 +84,25 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-3256933847625256835
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010674136574}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: b539dad8bba3f9e4983afb75364847a6, type: 3}

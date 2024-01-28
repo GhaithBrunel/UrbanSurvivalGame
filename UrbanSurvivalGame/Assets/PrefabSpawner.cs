@@ -1,31 +1,41 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class PrefabSpawnData
 {
     public GameObject prefab;
     public int count;
+    public List<Vector3> positions;
 }
 
 public class PrefabSpawner : MonoBehaviour
 {
     public PrefabSpawnData[] spawnData;
 
-    void Start()
+    public void SpawnPrefabsForNewGame()
     {
         foreach (var data in spawnData)
         {
-            SpawnPrefabs(data.prefab, data.count);
+            data.positions = new List<Vector3>();
+            for (int i = 0; i < data.count; i++)
+            {
+                Vector3 randomPosition = RandomNavmeshLocation();
+                Instantiate(data.prefab, randomPosition, Quaternion.identity);
+                data.positions.Add(randomPosition);
+            }
         }
     }
 
-    void SpawnPrefabs(GameObject prefab, int count)
+    public void LoadPrefabs(List<PrefabSpawnData> savedData)
     {
-        for (int i = 0; i < count; i++)
+        foreach (var data in savedData)
         {
-            Vector3 randomPosition = RandomNavmeshLocation();
-            Instantiate(prefab, randomPosition, Quaternion.identity);
+            foreach (var position in data.positions)
+            {
+                Instantiate(data.prefab, position, Quaternion.identity);
+            }
         }
     }
 
@@ -41,5 +51,11 @@ public class PrefabSpawner : MonoBehaviour
 
         return point;
     }
+
+    public List<PrefabSpawnData> GetSpawnData()
+    {
+        return new List<PrefabSpawnData>(spawnData);
+    }
 }
+
 

@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.AI; // Include this for NavMesh components
+using Unity.AI.Navigation;
 
 public enum MapSection
 {
@@ -8,6 +10,8 @@ public enum MapSection
     Industrial,
     Park
 }
+
+
 
 public class MapGenerator : MonoBehaviour
 {
@@ -30,12 +34,20 @@ public class MapGenerator : MonoBehaviour
     public Vector3 industrialBuildingScale = new Vector3(1, 1, 1);
     public Vector3 parkBuildingScale = new Vector3(1, 1, 1);
 
+    public NavMeshSurface navMeshSurface;
+
     private Dictionary<MapSection, Vector3> sectionScales;
     private int[,] buildingDensityMap;
     private PerlinNoiseGenerator perlinNoiseGenerator;
     public float noiseScale = 0.1f;
+    public int seed;
 
     private void Start()
+    {
+        InitializeMap();
+    }
+
+    public void InitializeMap()
     {
         sectionScales = new Dictionary<MapSection, Vector3>
         {
@@ -47,11 +59,57 @@ public class MapGenerator : MonoBehaviour
 
         buildingDensityMap = new int[mapWidth, mapHeight];
         perlinNoiseGenerator = new PerlinNoiseGenerator(noiseScale);
+
+        Random.InitState(seed);
         GenerateMap();
+        BakeNavMesh();
+    }
+
+
+    public void RegenerateMap(int width, int height, int newSeed)
+    {
+        mapWidth = width;
+        mapHeight = height;
+        seed = newSeed;
+        Random.InitState(seed);
+        InitializeMapParameters();
+        GenerateMap();
+        BakeNavMesh();
+    }
+    private void InitializeMapParameters()
+    {
+        sectionScales = new Dictionary<MapSection, Vector3>
+        {
+            { MapSection.CityCenter, cityCenterBuildingScale },
+            { MapSection.UrbanHomes, urbanHomeBuildingScale },
+            { MapSection.Industrial, industrialBuildingScale },
+            { MapSection.Park, parkBuildingScale }
+        };
+
+        buildingDensityMap = new int[mapWidth, mapHeight];
+        perlinNoiseGenerator = new PerlinNoiseGenerator(noiseScale);
+    }
+    private void BakeNavMesh()
+    {
+        // Ensure NavMeshSurface is attached and valid
+        if (navMeshSurface != null)
+        {
+            navMeshSurface.BuildNavMesh(); // This bakes the NavMesh at runtime
+        }
+        else
+        {
+            Debug.LogError("NavMeshSurface component not found or not set.");
+        }
     }
 
     private void GenerateMap()
     {
+        // Clear existing map
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+
         for (int x = 0; x < mapWidth; x++)
         {
             for (int y = 0; y < mapHeight; y++)
@@ -60,15 +118,15 @@ public class MapGenerator : MonoBehaviour
 
                 if (IsIntersection(x, y))
                 {
-                    Instantiate(intersectionPrefab, position, Quaternion.identity);
+                    Instantiate(intersectionPrefab, position, Quaternion.identity, transform);
                 }
                 else if (IsRoadTile(x, y))
                 {
-                    Instantiate(roadPrefab, position, Quaternion.identity);
+                    Instantiate(roadPrefab, position, Quaternion.identity, transform);
                 }
                 else
                 {
-                    Instantiate(grassPrefab, position, Quaternion.identity);
+                    Instantiate(grassPrefab, position, Quaternion.identity, transform);
                     TryPlaceRandomBuilding(position, x, y);
                 }
             }

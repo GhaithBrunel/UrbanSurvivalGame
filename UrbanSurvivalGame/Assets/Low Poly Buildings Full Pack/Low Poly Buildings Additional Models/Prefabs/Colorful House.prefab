@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 4000013569928376}
   - component: {fileID: 33000013150459096}
   - component: {fileID: 23000011251829310}
-  m_Layer: 0
+  - component: {fileID: -6851811996039445833}
+  m_Layer: 6
   m_Name: Colorful House
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,3 +84,25 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-6851811996039445833
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013547174478}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: a7bfbb81943e26b47bd073b7cfe13a99, type: 3}
