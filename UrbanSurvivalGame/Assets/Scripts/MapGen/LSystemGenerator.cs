@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+// dead code gives me compiler errors when i try to delete it 
+
 using UnityEngine;
 
 public class StructuredRoadNetworkGenerator : MonoBehaviour

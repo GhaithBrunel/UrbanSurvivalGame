@@ -1,4 +1,7 @@
+// dead code gives me compiler errors when i try to delete it 
 using System.Collections;
+
+
 using System.Collections.Generic;
 using UnityEngine;
 
