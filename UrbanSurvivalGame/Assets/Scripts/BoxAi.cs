@@ -38,8 +38,8 @@ public class BoxAI : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Player not found. Make sure your player GameObject has the 'Player' tag assigned.");
-            return; // Stop further execution if player is not found
+            Debug.LogError("Player not found.");
+            return; 
         }
 
         currentHealth = maxHealth;

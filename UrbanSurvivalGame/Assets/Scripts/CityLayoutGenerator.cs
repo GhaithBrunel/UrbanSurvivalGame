@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class CityLayoutGenerator : MonoBehaviour
@@ -25,4 +26,3 @@ public class CityLayoutGenerator : MonoBehaviour
         }
     }
 }
-

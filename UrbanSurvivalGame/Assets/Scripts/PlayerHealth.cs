@@ -1,18 +1,21 @@
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
-    using UnityEngine.UI; // Required for UI components
+using UnityEngine.UI; 
+using UnityEngine.AI;
 
-    public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
     {
         [SerializeField] private float maxHealth = 100f;
         private float currentHealth;
         [SerializeField] private Transform spawnPoint;
         public GameObject redScreenEffect;
         [SerializeField] private PlayerMovement playerMovement;
-        // Array to hold different blood splatter Images
+        // Array to hold different blood images
         public Image[] bloodSplatterImages;
-        void Start()
+
+    [SerializeField] private float maxRespawnDistance = 500f;
+    void Start()
         {
             currentHealth = maxHealth;
             redScreenEffect.SetActive(false);
@@ -29,12 +32,11 @@
 
             if (bloodSplatterImages.Length > 0)
             {
-                // Randomly select a blood splatter image and activate it
                 int index = Random.Range(0, bloodSplatterImages.Length);
                 var selectedImage = bloodSplatterImages[index];
                 selectedImage.gameObject.SetActive(true);
-                selectedImage.color = new Color(selectedImage.color.r, selectedImage.color.g, selectedImage.color.b, 1); // Ensure alpha is set to 1
-                StartCoroutine(FadeOutBloodSplatter(selectedImage, 2f)); // Fades out the blood splatter after 2 seconds
+                selectedImage.color = new Color(selectedImage.color.r, selectedImage.color.g, selectedImage.color.b, 1); 
+                StartCoroutine(FadeOutBloodSplatter(selectedImage, 2f)); 
             }
 
             if (currentHealth <= 0)
@@ -58,31 +60,48 @@
         private IEnumerator HandleDeath()
         {
             redScreenEffect.SetActive(true); // Activate red screen effect
-            yield return new WaitForSeconds(1); // Wait for 1 second
+            yield return new WaitForSeconds(1); // Wait  1 second
 
-            redScreenEffect.SetActive(false); // Deactivate red screen effect
-            RespawnPlayer(); // Respawn the player
+            redScreenEffect.SetActive(false); 
+            RespawnPlayer(); 
         }
 
         private void RespawnPlayer()
         {
             currentHealth = maxHealth;
-            transform.position = spawnPoint.position;
+           
 
-            // Reset hunger and stamina
-            ResetPlayerStats();
+        Vector3 respawnPosition = FindRandomNavMeshLocation(maxRespawnDistance);
+        transform.position = respawnPosition;
+        ResetPlayerStats();
 
             // Disable and re-enable CharacterController before moving the player
             CharacterController characterController = GetComponent<CharacterController>();
             if (characterController != null)
             {
                 characterController.enabled = false;
-                transform.position = spawnPoint.position;
+              
+
                 characterController.enabled = true;
             }
         }
 
-        private void ResetPlayerStats()
+
+    private Vector3 FindRandomNavMeshLocation(float maxDistance)
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * maxDistance + transform.position;
+        NavMeshHit hit;
+        for (int i = 0; i < 30; i++) // Attempt multiple times to find a valid position
+        {
+            if (NavMesh.SamplePosition(randomDirection, out hit, maxDistance, NavMesh.AllAreas))
+            {
+                return hit.position; // Return the position if a valid point is found
+            }
+        }
+        return transform.position; // Fallback to the current position if no valid point is found
+    }
+
+    private void ResetPlayerStats()
         {
             if (playerMovement != null)
             {

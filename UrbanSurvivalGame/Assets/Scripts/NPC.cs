@@ -4,31 +4,28 @@ using UnityEngine.Windows.Speech;
 
 public class NPC : MonoBehaviour
 {
-    public TextMeshProUGUI textMesh; // Assign in the Inspector
-    public GameObject foodPrefab; // Assign the food prefab in the Inspector
+    public TextMeshProUGUI textMesh; 
+    public GameObject foodPrefab; 
     private int foodSpawnCount = 0;
-    private const int maxFoodSpawns = 2; // Maximum food spawns
+    private const int maxFoodSpawns = 4; 
     private DictationRecognizer dictationRecognizer;
+    public GameObject bowPrefab;
 
     void Awake()
     {
-        // Initialize the DictationRecognizer
+        
         dictationRecognizer = new DictationRecognizer();
         dictationRecognizer.DictationResult += OnDictationResult;
     }
 
     void Start()
     {
-        // Optionally, disable the DictationRecognizer until the player is within range
-        // dictationRecognizer.Start(); // This line is now removed, start is called in OnTriggerEnter
+        
     }
-
-
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // Ensure DictationRecognizer is not null and not already running before starting it
             if (dictationRecognizer != null && dictationRecognizer.Status != SpeechSystemStatus.Running)
             {
                 dictationRecognizer.Start();
@@ -37,13 +34,11 @@ public class NPC : MonoBehaviour
         }
     }
 
-
-
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // Check if the DictationRecognizer is running before attempting to stop it
+            
             if (dictationRecognizer != null && dictationRecognizer.Status == SpeechSystemStatus.Running)
             {
                 dictationRecognizer.Stop();
@@ -55,7 +50,7 @@ public class NPC : MonoBehaviour
     void OnDictationResult(string text, ConfidenceLevel confidence)
     {
         Debug.Log($"Recognized Speech: {text}");
-        ProcessRecognizedSpeech(text.ToLower()); // Process the speech
+        ProcessRecognizedSpeech(text.ToLower()); 
     }
 
     public void Respond(string message)
@@ -74,7 +69,7 @@ public class NPC : MonoBehaviour
     {
         if (recognizedText.Contains("i'm hungry") && foodSpawnCount < maxFoodSpawns)
         {
-            Instantiate(foodPrefab, transform.position + Vector3.forward, Quaternion.identity); // Spawn food
+            Instantiate(foodPrefab, transform.position + Vector3.forward+ Vector3.up, Quaternion.identity); // Spawn food
             Respond("Here's some food for you!");
             foodSpawnCount++;
         }
@@ -84,15 +79,15 @@ public class NPC : MonoBehaviour
         }
         else if (recognizedText.Contains("hello") || recognizedText.Contains("hi"))
         {
-            Respond("Hello, adventurer! What brings you to our town?");
+            Respond("Hello, adventurer! What brings you to our town? Are you here to complete quests ");
         }
         else if (recognizedText.Contains("quest"))
         {
-            Respond("Ah, in search of adventure? There's a wolves that's been troubling the nearby villages.");
+            Respond("Ah, in search of adventure? There's a wolves that's been troubling the nearby villages. Would you like to hear abour the wolves");
         }
         else if (recognizedText.Contains("wolves"))
         {
-            Respond("Yes, the wolves. They've been trying to take over ");
+            Respond("Yes, the wolves. They've been trying to take over the city they've been killing our people. I'll help you take them down ");
         }
         else if (recognizedText.Contains("help") || recognizedText.Contains("assist"))
         {
@@ -101,7 +96,7 @@ public class NPC : MonoBehaviour
         else if (recognizedText.Contains("supplies"))
         {
             Respond("Here, take this healing potion. It should help you on your quest.");
-            // add some prefabs 
+            // add prefabs of potion /bandage
         }
         else if (recognizedText.Contains("information"))
         {
@@ -119,6 +114,22 @@ public class NPC : MonoBehaviour
         {
             Respond("Hmm, I'm not quite sure what you're asking for. Could you clarify?");
         }
+
+        if (recognizedText.Contains("i need a weapon"))
+        {
+            if (bowPrefab != null)
+            {
+                Instantiate(bowPrefab, transform.position + Vector3.forward * 2 + Vector3.up, Quaternion.identity); // Spawn the bow
+                Respond("Here's a bow for you. Use it wisely!");
+            }
+            else
+            {
+                Respond("I'm sorry, but I don't have any weapons to give.");
+            }
+        }
+
+
+
     }
 
 

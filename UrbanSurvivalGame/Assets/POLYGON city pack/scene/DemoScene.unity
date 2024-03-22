@@ -957,19 +957,19 @@ MonoBehaviour:
     count: 20
     positions: []
   - prefab: {fileID: 8273308772278552463, guid: 3a5ecf1a0f9f6ce419ccb9088917ee9d, type: 3}
-    count: 10
+    count: 50
     positions: []
   - prefab: {fileID: 3511155959419841454, guid: f2ddedc02a549b74c9879279d6df10f7, type: 3}
-    count: 10
+    count: 50
     positions: []
   - prefab: {fileID: 7674520668548914365, guid: 394af2026dc6dbe4a9e7f795291a5cfc, type: 3}
-    count: 10
+    count: 50
     positions: []
   - prefab: {fileID: 3683589432924860442, guid: 57d33cfdf70e1ba448be6d71212213c0, type: 3}
-    count: 10
+    count: 50
     positions: []
   - prefab: {fileID: 4482081713932476918, guid: 4d0ca25ea6c3bdc43adf5e43676e1f67, type: 3}
-    count: 10
+    count: 40
     positions: []
 --- !u!4 &1384082232
 Transform:

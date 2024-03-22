@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
 
   private void SaveGameState(Transform playerTransform, int seed)
 {
-    // Get the PrefabSpawner component
+    
     PrefabSpawner prefabSpawner = FindObjectOfType<PrefabSpawner>();
     if (prefabSpawner == null)
     {
@@ -92,16 +92,17 @@ public class GameManager : MonoBehaviour
         return;
     }
 
-    // Get the list of PrefabSpawnData from the PrefabSpawner
+   
     List<PrefabSpawnData> spawnDataList = prefabSpawner.GetSpawnData();
 
-    // Create the GameData object with all necessary data
+    
     GameData gameData = new GameData(playerTransform.position, playerTransform.rotation.eulerAngles, playerTransform.localScale, seed, spawnDataList);
 
-    // Serialize and save the GameData
+    
     string jsonData = JsonUtility.ToJson(gameData);
     File.WriteAllText(saveFileName, jsonData);
 }
+
 
     private void LoadGameState()
     {
@@ -123,7 +124,7 @@ public class GameManager : MonoBehaviour
 
                 mapGenerator.RegenerateMap(mapGenerator.mapWidth, mapGenerator.mapHeight, loadedData.seed);
                 inventory.loadInventory();
-                prefabSpawner.LoadPrefabs(loadedData.prefabSpawnData); // Assuming you save this in GameData
+                prefabSpawner.LoadPrefabs(loadedData.prefabSpawnData); 
             }
         }
         else

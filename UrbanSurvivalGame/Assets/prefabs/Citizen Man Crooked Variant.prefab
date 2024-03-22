@@ -344,6 +344,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textMesh: {fileID: 612344271811951247}
   foodPrefab: {fileID: 1519909849242270, guid: 47da0668706b5f54483e2e89a36e774e, type: 3}
+  bowPrefab: {fileID: 3317823749142253822, guid: d4958227484245e4592c41ab2c02ad22, type: 3}
 --- !u!54 &4219898723903553917
 Rigidbody:
   m_ObjectHideFlags: 0

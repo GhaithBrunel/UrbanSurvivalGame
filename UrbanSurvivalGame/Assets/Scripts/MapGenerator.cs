@@ -91,14 +91,14 @@ public class MapGenerator : MonoBehaviour
     }
     private void BakeNavMesh()
     {
-        // Ensure NavMeshSurface is attached and valid
+        
         if (navMeshSurface != null)
         {
             navMeshSurface.BuildNavMesh(); // This bakes the NavMesh at runtime
         }
         else
         {
-            Debug.LogError("NavMeshSurface component not found or not set.");
+            Debug.LogError("NavMeshSurface component not found ");
         }
     }
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public class PrefabResizer : MonoBehaviour
 {
     public GameObject prefab; // Assign your prefab here
