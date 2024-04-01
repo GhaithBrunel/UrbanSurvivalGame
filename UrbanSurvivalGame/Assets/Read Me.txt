@@ -1,0 +1,5 @@
+Hello, assessors. The folders to examine are Scripts, Scenes, and Prefabs.
+
+Within the Scenes, please review the Demo Scene and Main Menu. The Main Menu serves as the game's starting point.
+
+For the Scripts, focus on the Combat Scripts, Inventory Scripts, NPC Scripts, Player Scripts, Real Map Generation Code, and Save Mechanics.
