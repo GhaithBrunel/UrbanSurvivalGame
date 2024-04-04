@@ -74,12 +74,12 @@ public class Inventory : MonoBehaviour
         {
             dragInventoryIcon();
         }
-        else if (currentDragSlotIndex != -1 && Input.GetMouseButtonUp(0) || currentDragSlotIndex != -1 && !inventory.activeInHierarchy) // If we are hovered over a slot and release, if we are dragging an item and close the inventory
+        else if (currentDragSlotIndex != -1 && Input.GetMouseButtonUp(0) || currentDragSlotIndex != -1 && !inventory.activeInHierarchy) // basically lets us move the items 
         {
             dropInventoryIcon();
         }
 
-        if (Input.GetKeyDown(KeyCode.Q)) // The button we need to press to drop items from the inventory
+        if (Input.GetKeyDown(KeyCode.Q)) // Q to drop the item 
             dropItem();
 
         for (int i = 1; i < hotbarSlots.Count + 1; i++)
@@ -93,7 +93,7 @@ public class Inventory : MonoBehaviour
         dragIconImage.transform.position = Input.mousePosition;
     }
 
-    private void itemRaycast(bool hasClicked = false)
+    private void itemRaycast(bool hasClicked = false) 
     {
         itemHoverText.text = "";
         Ray ray = Camera.main.ScreenPointToRay(crosshair.transform.position);
@@ -129,7 +129,7 @@ public class Inventory : MonoBehaviour
 
         if (overrideIndex != -1)
         {
-            // Directly place the item in the specified slot index
+            // Direclty places item to any slot in the inventory 
             allInventorySlots[overrideIndex].setItem(itemToAdd);
             itemToAdd.gameObject.SetActive(false);
             allInventorySlots[overrideIndex].updateData();
@@ -155,7 +155,7 @@ public class Inventory : MonoBehaviour
                     allInventorySlots[i].updateData();
                     return;
                 }
-                else // Add as much as we can to the current slot
+                else 
                 {
                     heldItem.currentQuantity = heldItem.maxQuantity;
                     leftoverQuantity -= freeSpaceInSlot;
@@ -182,6 +182,8 @@ public class Inventory : MonoBehaviour
         }
     }
 
+
+    // for some reason the game keeps kicking me off the map each time i open the inventory fix this tommorow.
     private void toggleInventory(bool enable)
     {
         inventory.SetActive(enable);
@@ -225,7 +227,7 @@ public class Inventory : MonoBehaviour
 
                 currentDraggedItem = curSlot.getItem(); // Get the item from the current slot
                 dragIconImage.sprite = currentDraggedItem.icon;
-                dragIconImage.color = new Color(1, 1, 1, 1); // Make the follow mouse icon opaque (visible).
+                dragIconImage.color = new Color(1, 1, 1, 1); // Make the follow mouse icon  visibl 
 
                 curSlot.setItem(null); // Remove the item from the slot we just picked up the item from.
             }
@@ -377,7 +379,7 @@ public class Inventory : MonoBehaviour
     }
 
 
-    private void removeIngredient(string itemName, int quantity)
+    private void removeIngredient(string itemName, int quantity) // basically removes the ingrident when the item is created. 
     {
         if (!haveIngredient(itemName, quantity))
             return;
@@ -428,7 +430,7 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-    private void saveInventory()
+    private void saveInventory() // goes through each index of the inventory and if it finds an item it saves it and where it was placed .
     {
         InventoryData data = new InventoryData();
 
@@ -447,7 +449,7 @@ public class Inventory : MonoBehaviour
         File.WriteAllText(saveFileName, jsonData);
     }
 
-    public void loadInventory()
+    public void loadInventory() //basically reads the json file and then puts all the items back towards to when it was saved
     {
         if (File.Exists(saveFileName))
         {

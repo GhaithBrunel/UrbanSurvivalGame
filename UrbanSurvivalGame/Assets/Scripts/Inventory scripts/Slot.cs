@@ -25,9 +25,10 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void setItem(Item item)
     {
-        heldItem = item;
+        heldItem = item; // Assign the item to the heldItem variable.
 
         if (item != null)
+        // If there's an item, update the slot's image and make it opaque. Otherwise, clear the slot.
         {
             thisSlotImage.sprite = heldItem.icon;
             thisSlotImage.color = opaque;
@@ -46,12 +47,13 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         return heldItem;
     }
 
-    public bool hasItem()
+    public bool hasItem() // checks if the slot has an iterm 
     {
         return heldItem ? true : false;
     }
 
     public void updateData()
+    // If there's an item, display its quantity. Otherwise, clear the text.
     {
         if (heldItem != null)
             thisSlotQuantityText.text = heldItem.currentQuantity.ToString();
@@ -59,6 +61,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             thisSlotQuantityText.text = "";
     }
 
+    //uses the mouse to however over inventory 
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
         hovered = true;

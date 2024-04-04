@@ -3,7 +3,7 @@ using UnityEngine.UI;
 //new
 public class SprintMeterUI : MonoBehaviour
 {
-    public PlayerMovement playerMovement; // Assign this in the inspector
+    public PlayerMovement playerMovement; 
     private Slider sprintMeterSlider;
 
     void Start()

@@ -10,6 +10,7 @@ public class Recipe : ScriptableObject
     public List<requiredIngredients> requiredIngredients = new List<requiredIngredients>();
 }
 
+/// the recipe for the cratable items. 
 [System.Serializable]
 public class requiredIngredients
 {

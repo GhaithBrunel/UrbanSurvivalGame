@@ -21,11 +21,11 @@ public class ArrowScript : MonoBehaviour
         // Check if the arrow hits an enemy
         if (collision.collider.CompareTag("enemy"))
         {
-            // Call a method to apply damage to the enemy
+            // Calls a method to apply damage to the enemy
             ApplyDamage(collision.gameObject);
         }
 
-        // Adjust the position and rotation to make it look like it's stuck
+        // Adjust the position and rotation to make it look like it's stuck to the surface adds realism
         transform.position = collision.contacts[0].point;
         transform.rotation = Quaternion.LookRotation(collision.contacts[0].normal);
 
@@ -35,8 +35,7 @@ public class ArrowScript : MonoBehaviour
 
     void ApplyDamage(GameObject enemy)
     {
-        // Assuming the enemy has a script with a TakeDamage method
-        // Replace 'EnemyHealth' with the actual script name on your enemy
+       
         BoxAI enemyHealth = enemy.GetComponent<BoxAI>();
         if (enemyHealth != null)
         {

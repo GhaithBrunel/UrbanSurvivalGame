@@ -4,7 +4,7 @@ using UnityEngine.Windows.Speech;
 public class PlayerSpeechRecognition : MonoBehaviour
 {
     private DictationRecognizer dictationRecognizer;
-    public NPC npc; // Reference to the NPC script, assign in the Inspector
+    public NPC npc; 
 
     void Start()
     {
@@ -32,7 +32,7 @@ public class PlayerSpeechRecognition : MonoBehaviour
 
     private void ProcessRecognizedSpeech(string recognizedText)
     {
-        // Convert to lowercase for case-insensitive comparison
+        // Convert to lowercase as it can be case sensitve 
         recognizedText = recognizedText.ToLower();
 
         if (recognizedText.Contains("hello") || recognizedText.Contains("hi"))

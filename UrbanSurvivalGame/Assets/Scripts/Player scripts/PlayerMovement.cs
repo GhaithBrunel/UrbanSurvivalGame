@@ -36,10 +36,9 @@ public class PlayerMovement : MonoBehaviour
     private float currentHunger;
 
     [Header("Health Settings")]
-    [SerializeField] private PlayerHealth playerHealth; // Reference to the player's health component
-    [SerializeField] private float healthRegenRate = 10f; // Amount of health to regenerate
-    [SerializeField] private float healthRegenInterval = 30f; // Time interval for health regeneration in seconds
-
+    [SerializeField] private PlayerHealth playerHealth; 
+    [SerializeField] private float healthRegenRate = 10f; 
+    [SerializeField] private float healthRegenInterval = 30f; 
 
     private CharacterController controller;
     private Vector2 currentDir;
@@ -206,7 +205,7 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = !shouldLock;
     }
 
-    // Public methods for accessing current stamina and hunger...
+
     public float GetCurrentSprintStamina()
     {
         return currentSprintStamina;
@@ -246,14 +245,14 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator HealthRegenerationRoutine()
     {
-        Debug.Log("Health regeneration routine started");
+        Debug.Log("Health regenen has begun");
         while (true)
         {
             yield return new WaitForSeconds(healthRegenInterval);
             Debug.Log("Health regeneration check");
             if (currentHunger > maxHunger * 0.6f)
             {
-                Debug.Log("Regenerating health by " + healthRegenRate);
+                Debug.Log("health regen amount  " + healthRegenRate);
                 playerHealth.Heal(healthRegenRate);
             }
         }

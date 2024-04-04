@@ -1,10 +1,11 @@
 using UnityEngine;
+
 using System.IO;
 
 public class GameSaveManager : MonoBehaviour
 {
-    public Transform playerTransform; // Assign in the inspector
-    public MapGenerator mapGenerator; // Reference to the MapGenerator
+    public Transform playerTransform; 
+    public MapGenerator mapGenerator; 
     private string saveFileName;
 
 

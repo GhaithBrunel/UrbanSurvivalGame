@@ -28,9 +28,9 @@ public class Ribs : MonoBehaviour
         // Check if the player can eat the ribs
         if (inventory != null && inventory.playerMovement.GetCurrentHunger() < inventory.playerMovement.GetMaxHunger())
         {
-            // Eat the rib, which will handle the inventory and hunger update
+            
             inventory.EatRibs();
-            inventory.playerMovement.Eat(25f); // Update hunger with the increase amount
+            inventory.playerMovement.Eat(25f); // Update hunger with the increased amount
         }
     }
 

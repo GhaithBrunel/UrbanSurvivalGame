@@ -23,10 +23,10 @@ public class BoxAI : MonoBehaviour
     private NavMeshAgent agent;
 
     public int maxHealth = 100;
-    public Slider healthBar; // Assign this in the inspector
+    public Slider healthBar; 
     private int currentHealth;
 
-    public GameObject itemPrefab; // Reference to the item prefab, assign this in the inspector
+    public GameObject itemPrefab; 
 
     void Start()
     {
@@ -187,8 +187,8 @@ public class BoxAI : MonoBehaviour
         // Disable the NavMeshAgent and other components that should not be active after death
         if (agent != null) agent.enabled = false;
 
-        // Determine the number of items to drop (between 1 and 3)
-        int itemsToDrop = Random.Range(1, 4); // Random.Range is inclusive for the first parameter and exclusive for the second
+        
+        int itemsToDrop = Random.Range(1, 4); //  between 1 and 4 food may be dropped 
 
         // Spawn the items at the wolf's position
         for (int i = 0; i < itemsToDrop; i++)
@@ -201,7 +201,7 @@ public class BoxAI : MonoBehaviour
 
         Destroy(gameObject);
 
-        // You can also add a delay or invoke other methods to handle the enemy's death
+        
     }
 
     private void UpdateHealthUI()

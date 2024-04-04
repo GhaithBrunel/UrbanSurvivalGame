@@ -24,7 +24,7 @@ public class NPC : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player")) // if the player entres the talking zone it turns on the speach recgonzier
         {
             if (dictationRecognizer != null && dictationRecognizer.Status != SpeechSystemStatus.Running)
             {

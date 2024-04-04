@@ -11,7 +11,7 @@ public class PlayerHealth : MonoBehaviour
         [SerializeField] private Transform spawnPoint;
         public GameObject redScreenEffect;
         [SerializeField] private PlayerMovement playerMovement;
-        // Array to hold different blood images
+       
         public Image[] bloodSplatterImages;
 
     [SerializeField] private float maxRespawnDistance = 500f;
@@ -25,7 +25,7 @@ public class PlayerHealth : MonoBehaviour
             }
         }
 
-        public void TakeDamage(float amount)
+        public void TakeDamage(float amount) // when the player takes damage a blood splatter is displayed 
         {
             currentHealth -= amount;
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
@@ -45,7 +45,7 @@ public class PlayerHealth : MonoBehaviour
             }
         }
 
-        private IEnumerator FadeOutBloodSplatter(Image bloodSplatter, float duration)
+        private IEnumerator FadeOutBloodSplatter(Image bloodSplatter, float duration) // ensure that the bloodsplatter fades away 
         {
             Color originalColor = bloodSplatter.color;
             for (float t = 0; t < 1; t += Time.deltaTime / duration)
@@ -57,7 +57,7 @@ public class PlayerHealth : MonoBehaviour
         }
 
 
-        private IEnumerator HandleDeath()
+        private IEnumerator HandleDeath() // put a red creen when the player dies 
         {
             redScreenEffect.SetActive(true); // Activate red screen effect
             yield return new WaitForSeconds(1); // Wait  1 second
@@ -66,7 +66,7 @@ public class PlayerHealth : MonoBehaviour
             RespawnPlayer(); 
         }
 
-        private void RespawnPlayer()
+        private void RespawnPlayer() // spawns the player randomly on the navmesh 
         {
             currentHealth = maxHealth;
            
@@ -91,14 +91,14 @@ public class PlayerHealth : MonoBehaviour
     {
         Vector3 randomDirection = Random.insideUnitSphere * maxDistance + transform.position;
         NavMeshHit hit;
-        for (int i = 0; i < 30; i++) // Attempt multiple times to find a valid position
+        for (int i = 0; i < 30; i++) 
         {
             if (NavMesh.SamplePosition(randomDirection, out hit, maxDistance, NavMesh.AllAreas))
             {
-                return hit.position; // Return the position if a valid point is found
+                return hit.position; 
             }
         }
-        return transform.position; // Fallback to the current position if no valid point is found
+        return transform.position; 
     }
 
     private void ResetPlayerStats()
